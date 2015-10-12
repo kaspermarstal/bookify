@@ -4,9 +4,11 @@
   "description": "A lightweight node wrapper for the Google Books API backed by a HTTP cache.",
   "main": "./build/google-books-search.js",
   "dependencies": {
+    "cache-service-redis": "^1.1.0",
     "extend": "",
     "querystring": "",
-    "superagent": "^1.4.0"
+    "superagent": "^1.4.0",
+    "superagent-cache": "^1.0.3"
   },
   "devDependencies": {
     "babel": "^5.8.23",
