@@ -4,11 +4,22 @@ var books = require('../lib/google-books-search.js');
 
 describe('Searching', function() {
 
-	it('should return a JSON object of books', function(done) {
-		books.search('Guinness World Records', {}, function(error, results) {
+	it('should return a JSON object of books with all fields', function(done) {
+		books.search('Guinness World Records', function(error, results) {
 			should.not.exist(error);
 			should.exist(results);
 			results[0].should.have.property('title');
+			results[0].should.have.property('id');
+			done();
+		});
+	});
+
+	it('should return a JSON object of books with a subset of fields', function(done) {
+		books.search('Guinness World Records', { returnFields: 'items(volumeInfo(title,authors,publishedDate))' }, function(error, results) {
+			should.not.exist(error);
+			should.exist(results);
+			results[0].should.have.property('title');
+			results[0].should.not.have.property('id');
 			done();
 		});
 	});

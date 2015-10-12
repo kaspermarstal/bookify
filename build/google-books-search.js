@@ -2,15 +2,27 @@
  * google-books-search
  */
 
-import superagent from 'superagent';
-import querystring from 'querystring';
-import extend from 'extend';
+'use strict';
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _superagent = require('superagent');
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+var _querystring = require('querystring');
+
+var _querystring2 = _interopRequireDefault(_querystring);
+
+var _extend = require('extend');
+
+var _extend2 = _interopRequireDefault(_extend);
 
 // https://developers.google.com/books/docs/v1/using#st_params
-const defaultOptions = {
+var defaultOptions = {
 	// Google API key
 	key: null,
-	// Search in a specified field  
+	// Search in a specified field 
 	field: null,
 	// The position in the collection at which to start the list of results (startIndex)
 	offset: 0,
@@ -23,11 +35,11 @@ const defaultOptions = {
 	// Restrict results to a specified language (two-letter ISO-639-1 code) (langRestrict)
 	lang: 'en',
 	// Restrict response to the specified fields
-	returnFields: null,
+	returnFields: 'items(volumeInfo(title,authors,publishedDate,imageLinks))'
 };
 
 // Special Keywords
-const fields = {
+var fields = {
 	title: 'intitle:',
 	author: 'inauthor:',
 	publisher: 'inpublisher:',
@@ -36,7 +48,7 @@ const fields = {
 };
 
 // Base url for Google Books API
-const baseUrl = "https://www.googleapis.com/books/v1/volumes?";
+var baseUrl = "https://www.googleapis.com/books/v1/volumes?";
 
 /**
  * Search Google Books
@@ -45,36 +57,31 @@ const baseUrl = "https://www.googleapis.com/books/v1/volumes?";
  * @param obj Options
  * @param func Callback
  */
-const search = function(query, options, callback) {
+var search = function search(query, options, callback) {
 
 	// Make the options object optional
-  if ( !callback || typeof callback != "function") {
-  	// Callback is the second parameter
-    callback = options;
-    // No options
-    options = undefined;
-  }
+	if (!callback || typeof callback != "function") {
+		// Callback is the second parameter
+		callback = options;
+		// No options
+		options = undefined;
+	}
 
-	options = extend(defaultOptions, options || {});
+	options = (0, _extend2['default'])(defaultOptions, options || {});
 
 	// Validate options
-	if ( !query ) {
+	if (!query) {
 		callback(new Error("Query is required"));
 		return;
 	}
 
-	if ( options.offset < 0) {
+	if (options.offset < 0) {
 		callback(new Error("Offset cannot be below 0"));
 		return;
 	}
-	
-	if ( options.limit < 1 || options.limit > 40 ) {
-		callback(new Error("Limit must be between 1 and 40"));
-		return;
-	}
 
-	if ( options.returnFields != null && typeof(options.returnFields) != 'string') {
-		callback(new Error("Option returnFields must be string"));
+	if (options.limit < 1 || options.limit > 40) {
+		callback(new Error("Limit must be between 1 and 40"));
 		return;
 	}
 
@@ -91,41 +98,36 @@ const search = function(query, options, callback) {
 		printType: options.type,
 		orderBy: options.order,
 		langRestrict: options.lang,
+		fields: options.returnFields
 	};
-
-	// Restrict query to specified fields
-	if ( options.returnFields ) {
-		query.fields = options.returnFields;
-	}
 
 	if (options.key) {
 		query.key = options.key;
 	}
 
-	const uri = baseUrl + querystring.stringify(query);
-
+	var uri = baseUrl + _querystring2['default'].stringify(query);
 
 	// Send Request
-	superagent.get(uri).end(function(err, response) {
+	_superagent2['default'].get(uri).end(function (err, res) {
 		if (err) {
 			callback(err);
 		}
 
-		if ( response.statusCode && response.statusCode === 200 ) {
+		if (res.statusCode && res.statusCode === 200) {
 
 			// Array of JSON results to return
-			let results = [];
+			var results = [];
 
 			// Extract useful data
-			if ( response.body.items ) {
+			if (res.body.items) {
 
-				for(let i = 0; i < response.body.items.length; i++) {
+				for (var i = 0; i < res.body.items.length; i++) {
 
-					let book = response.body.items[i].volumeInfo;
-					let push = {};
+					var book = res.body.items[i].volumeInfo;
+					var push = {};
 
 					// ID
-					if (response.body.items[i].id) push.id = response.body.items[i].id;
+					if (res.body.items[i].id) push.id = res.body.items[i].id;
 					// Title
 					if (book.title) push.title = book.title;
 					// Authors
@@ -148,17 +150,14 @@ const search = function(query, options, callback) {
 					if (book.infoLink) push.link = book.infoLink;
 
 					results.push(push);
-
 				}
-
 			}
 
 			callback(null, results);
-
 		} else {
-			callback(new Error("Status Code: " + response.statusCode));
+			callback(new Error("Status Code: " + res.statusCode));
 		}
 	});
-}
+};
 
 module.exports.search = search;
