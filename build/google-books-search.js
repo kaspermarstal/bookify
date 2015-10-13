@@ -1,14 +1,10 @@
-/**
- * google-books-search
- */
-
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _superagent = require('superagent');
-
-var _superagent2 = _interopRequireDefault(_superagent);
 
 var _querystring = require('querystring');
 
@@ -17,6 +13,10 @@ var _querystring2 = _interopRequireDefault(_querystring);
 var _extend = require('extend');
 
 var _extend2 = _interopRequireDefault(_extend);
+
+var _packageJson = require('../package.json');
+
+var _packageJson2 = _interopRequireDefault(_packageJson);
 
 // https://developers.google.com/books/docs/v1/using#st_params
 var defaultOptions = {
@@ -35,7 +35,7 @@ var defaultOptions = {
 	// Restrict results to a specified language (two-letter ISO-639-1 code) (langRestrict)
 	lang: 'en',
 	// Restrict response to the specified fields
-	returnFields: 'items(volumeInfo(title,authors,publishedDate,imageLinks))'
+	returnFields: null
 };
 
 // Special Keywords
@@ -57,18 +57,22 @@ var baseUrl = "https://www.googleapis.com/books/v1/volumes?";
  * @param obj Options
  * @param func Callback
  */
-var search = function search(query, options, callback) {
+var search = function search(superagent, query, options, callback) {
 
 	// Make the options object optional
 	if (!callback || typeof callback != "function") {
-		// Callback is the second parameter
+		// Callback is the third parameter
 		callback = options;
 		// No options
 		options = undefined;
 	}
 
-	options = (0, _extend2['default'])(defaultOptions, options || {});
+	if (options) {
+		console.log(options.returnFields);
+	}
 
+	options = (0, _extend2['default'])(defaultOptions, options || {});
+	console.log(options.returnFields);
 	// Validate options
 	if (!query) {
 		callback(new Error("Query is required"));
@@ -85,6 +89,11 @@ var search = function search(query, options, callback) {
 		return;
 	}
 
+	if (options.returnFields != null && typeof options.returnFields != 'string') {
+		callback(new Error("Option returnFields must be string"));
+		return;
+	}
+
 	// Set any special keywords
 	if (options.field) {
 		query = fields[options.field] + query;
@@ -97,9 +106,13 @@ var search = function search(query, options, callback) {
 		maxResults: options.limit,
 		printType: options.type,
 		orderBy: options.order,
-		langRestrict: options.lang,
-		fields: options.returnFields
+		langRestrict: options.lang
 	};
+
+	// Restrict query to specified fields
+	if (options.returnFields) {
+		query.fields = options.returnFields;
+	}
 
 	if (options.key) {
 		query.key = options.key;
@@ -107,27 +120,27 @@ var search = function search(query, options, callback) {
 
 	var uri = baseUrl + _querystring2['default'].stringify(query);
 
-	// Send Request
-	_superagent2['default'].get(uri).end(function (err, res) {
+	// Send Request with gzip enabled headers as specified by https://developers.google.com/books/docs/v1/performance
+	superagent.get(uri).set('Accept-Encoding', 'gzip').set('User-Agent', 'node-superagent/' + _packageJson2['default'].version + ' (gzip)').end(function (err, response) {
 		if (err) {
 			callback(err);
 		}
 
-		if (res.statusCode && res.statusCode === 200) {
+		if (response.statusCode && response.statusCode === 200) {
 
 			// Array of JSON results to return
 			var results = [];
 
 			// Extract useful data
-			if (res.body.items) {
+			if (response.body.items) {
 
-				for (var i = 0; i < res.body.items.length; i++) {
+				for (var i = 0; i < response.body.items.length; i++) {
 
-					var book = res.body.items[i].volumeInfo;
+					var book = response.body.items[i].volumeInfo;
 					var push = {};
 
 					// ID
-					if (res.body.items[i].id) push.id = res.body.items[i].id;
+					if (response.body.items[i].id) push.id = response.body.items[i].id;
 					// Title
 					if (book.title) push.title = book.title;
 					// Authors
@@ -155,9 +168,8 @@ var search = function search(query, options, callback) {
 
 			callback(null, results);
 		} else {
-			callback(new Error("Status Code: " + res.statusCode));
+			callback(new Error("Status Code: " + response.statusCode));
 		}
 	});
 };
-
-module.exports.search = search;
+exports.search = search;

@@ -6,19 +6,20 @@
   "dependencies": {
     "cache-service-redis": "^1.1.0",
     "extend": "",
-    "querystring": "",
-    "superagent": "^1.4.0",
-    "superagent-cache": "^1.0.3"
+    "querystring": ""
   },
   "devDependencies": {
     "babel": "^5.8.23",
     "mocha": "1.x.x",
-    "should": "0.6.x"
+    "should": "0.6.x",
+    "superagent": "^1.4.0",
+    "superagent-cache": "^1.0.3"
   },
   "scripts": {
     "test": "make test",
     "compile": "babel lib -d build",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "pretest": "npm run compile"
   },
   "repository": {
     "type": "git",
