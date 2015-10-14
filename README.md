@@ -1,6 +1,6 @@
 # node-google-books-search
 
-A lightweight node wrapper for the Google Books API.
+A lightweight node wrapper for the Google Books API intended to be used together with the `superagent-cache` module.
 
 ## Install
 
