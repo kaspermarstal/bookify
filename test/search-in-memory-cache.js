@@ -3,12 +3,11 @@ import { expect } from 'chai';
 import googleBooks from '../lib/googleBooks.js';
 import superagentCache from 'superagent-cache';
 
-const superagentRedisCache = superagentCache()
-const googleBooksNoCache = new googleBooks({ superagent: superagentRedisCache });
+const googleBooksInMemoryCache = new googleBooks({ superagent: superagentCache() });
 
 describe('GoogleBooks with in-memory cache', function() {
   it('should return a JSON object of books with all fields', function(done) {
-    return googleBooksNoCache.search('Guinness World Records')
+    return googleBooksInMemoryCache.search('Guinness World Records')
       .then(function(result) {
         expect(result[0]).to.have.property('title');
         done();
@@ -21,7 +20,7 @@ describe('GoogleBooks with in-memory cache', function() {
     // wiggle room for resource constrained systems
     this.timeout(10);
 
-    return googleBooksNoCache.search('Guinness World Records')
+    return googleBooksInMemoryCache.search('Guinness World Records')
       .then(function(result) {
         expect(result[0]).to.have.property('title');
       })

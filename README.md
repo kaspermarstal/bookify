@@ -1,28 +1,28 @@
-# node-google-books-search
+# GoogleBooks
 
-A lightweight node wrapper for the Google Books API intended to be used together with the `superagent-cache` module.
+A lightweight node wrapper for the Google Books API intended to be used with the `superagent-cache` module.
 
 ## Install
 
-    npm install google-books-search
+    npm install googlebooks
 
 ## Basic Usage
 
 ### .search(query, options, callback)
 
-Search for books matching the specified query.
+Search for books matching the specified query and automatically cache the result.
 
-	var books = require('google-books-search');
+	import googleBooks from '../lib/googleBooks.js';
+	import superagentCache from 'superagent-cache';
 
-	books.search("Professional JavaScript for Web Developers", function(error, results) {
-		if ( ! error ) {
-			console.log(results);
-		} else {
-			console.log(error);
-		}
+	const googleBooksInMemoryCache = new googleBooks({ superagent: superagentCache() });
+	googleBooksInMemoryCache.search('Professional JavaScript for Web Developers')
+		.then(function(result) {
+			console.log(result);
+		});
 	});
 
-Returns an array of JSON objects. For example;
+This returns an array of JSON objects. For example;
 
 	[
 		{
@@ -44,13 +44,15 @@ Returns an array of JSON objects. For example;
 
 	]
 
+The result will be returned form the cache next time the search is performed. GoogleBooks will fallback to normal http reqeusts if superagent argument is left out.
+
 ## Advanced Usage
 
-The search method optionally accepts an options object as the second argument. See below for an overview of the available options.
+The search method optionally accepts an options object. See below for an overview of the available options.
 
-	var books = require('google-books-search');
+	import googleBooks from 'googlebooks';
 
-	var options = {
+	const options = {
 		key: "YOUR API KEY",
 		field: 'title',
 		offset: 0,
@@ -61,12 +63,9 @@ The search method optionally accepts an options object as the second argument. S
 		returnFields: 'items(volumeInfo(title,authors,publishedDate))'
 	};
 
-	books.search("Professional JavaScript for Web Developers", options, function(error, results) {
-		if ( ! error ) {
+	const googleBooksNoCache = new googleBooks({ options: options });
+	googleBooksNoCache.search('Professional JavaScript for Web Developers') {
 			console.log(results);
-		} else {
-			console.log(error);
-		}
 	});
 
 ## Options
@@ -80,4 +79,4 @@ The search method optionally accepts an options object as the second argument. S
 `lang` : Restrict results to a specified language (two-letter ISO-639-1 code) (Default: en)
 `returnFields`: Restrict response to the specified fields (Default: all)
 
-For more info please see the [Google Books API documentation](http://code.google.com/apis/books/docs/v1/using.html)
+For more info please see the [Google Books API documentation](http://code.google.com/apis/books/docs/v1/using.html) and [superagent-cache repository](https://github.com/jpodwys/superagent-cache).
