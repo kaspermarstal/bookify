@@ -62,11 +62,6 @@ describe('GoogleBooks without cache', function() {
   //     const g5 = new googleBooks({ options: { offset: -1 }});
   //   }).to.throw(new Error('Limit must be between 1 and 40'));
   // });
-  it('should not accept an offset below 0', function(done) {
-    expect(function() {
-      const g5 = new googleBooks({ options: { offset: -1 }});
-    }).to.throw(new Error('Offset cannot be below 0'));
-  });
 
   it('should return an error if no query is specified', function() {
     const g6 = new googleBooks();
