@@ -12,10 +12,10 @@ A lightweight node wrapper for the Google Books API intended to be used with the
 
 Search for books matching the specified query and automatically cache the result.
 
-	import googleBooks from '../lib/googleBooks.js';
+	import googlebooks from '../lib/googleBooks.js';
 	import superagentCache from 'superagent-cache';
 
-	const googleBooksInMemoryCache = new googleBooks({ superagent: superagentCache() });
+	const googlebooksInMemoryCache = new googlebooks({ superagent: superagentCache() });
 	googleBooksInMemoryCache.search('Professional JavaScript for Web Developers')
 		.then(function(result) {
 			console.log(result);
@@ -44,13 +44,13 @@ This returns an array of JSON objects. For example;
 
 	]
 
-The result will be returned form the cache next time the search is performed. GoogleBooks will fallback to normal http reqeusts if superagent argument is left out.
+The result will be returned form the cache the next time the search is performed. GoogleBooks use a regular superagent instance (i.e. without cache) if the `superagent` argument is left out.
 
 ## Advanced Usage
 
 The search method optionally accepts an options object. See below for an overview of the available options.
 
-	import googleBooks from 'googlebooks';
+	import googlebooks from 'googlebooks';
 
 	const options = {
 		key: "YOUR API KEY",
@@ -63,8 +63,8 @@ The search method optionally accepts an options object. See below for an overvie
 		returnFields: 'items(volumeInfo(title,authors,publishedDate))'
 	};
 
-	const googleBooksNoCache = new googleBooks({ options: options });
-	googleBooksNoCache.search('Professional JavaScript for Web Developers') {
+	const googlebooksNoCache = new googlebooks({ options: options });
+	googlebooksNoCache.search('Professional JavaScript for Web Developers') {
 			console.log(results);
 	});
 
@@ -79,4 +79,4 @@ The search method optionally accepts an options object. See below for an overvie
 `lang` : Restrict results to a specified language (two-letter ISO-639-1 code) (Default: en)
 `returnFields`: Restrict response to the specified fields (Default: all)
 
-For more info please see the [Google Books API documentation](http://code.google.com/apis/books/docs/v1/using.html) and [superagent-cache repository](https://github.com/jpodwys/superagent-cache).
+For more info see the [Google Books API documentation](http://code.google.com/apis/books/docs/v1/using.html) and [superagent-cache documentation](https://github.com/jpodwys/superagent-cache).
