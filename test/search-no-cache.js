@@ -8,7 +8,7 @@ describe('GoogleBooks without cache', function() {
     return g0.search('Guinness World Records')
       .then(function(result) {
         expect(result[0]).to.have.property('title');
-      })
+      });
   });
 
   it('should return a JSON object of books with a subset of fields', function() {
@@ -17,7 +17,9 @@ describe('GoogleBooks without cache', function() {
       .then(function(result) {
         expect(result[0]).to.have.property('title');
         expect(result[0]).to.not.have.property('id');
-      })
+      }, function(err) {
+        expect(true).to.equal(false); // should not be reached
+      });
   });
 
   it('should return an empty object if there are no results', function() {
@@ -27,7 +29,9 @@ describe('GoogleBooks without cache', function() {
         expect(result).to.exist;
         expect(result).to.be.empty;
         expect(result.length).to.equal(0);
-      })
+      }, function(err) {
+        expect(true).to.equal(false); // should not be reached
+      });
   });
 
   it('should return a specified number of results', function() {
@@ -36,7 +40,9 @@ describe('GoogleBooks without cache', function() {
       .then(function(result) {
         expect(result).to.exist;
         expect(result.length).to.equal(15);
-      })
+      }, function(err) {
+        expect(true).to.equal(false); // should not be reached
+      });
   });
 
   // TODO: This fails with

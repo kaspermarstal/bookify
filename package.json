@@ -1,6 +1,6 @@
 {
   "name": "googlebooks",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A cache-backed lightweight node wrapper for the Google Books API",
   "main": "./lib/googlebooks.js",
   "dependencies": {
@@ -11,7 +11,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "mocha": "^2.3.3",
-    "superagent-cache": "^1.0.3"
+    "superagent-cache": "^1.0.4"
   },
   "scripts": {
     "test": "make test"
