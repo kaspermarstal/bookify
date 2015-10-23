@@ -1,6 +1,6 @@
 {
   "name": "bookify",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A cache-backed lightweight node wrapper for the Google Books API",
   "main": "./lib/bookify.js",
   "dependencies": {
