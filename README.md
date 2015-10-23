@@ -1,10 +1,10 @@
-# GoogleBooks
+# Bookify
 
 A lightweight node wrapper for the Google Books API intended to be used with the `superagent-cache` module.
 
 ## Install
 
-    npm install googlebooks
+    npm install bookify
 
 ## Basic Usage
 
