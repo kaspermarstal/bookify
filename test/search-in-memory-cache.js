@@ -1,14 +1,12 @@
 import mocha from 'mocha';
 import { expect } from 'chai';
 import bookify from '../lib/bookify';
-import superagent from 'superagent';
 import superagentCache from 'superagent-cache';
 
 let bookifyInMemoryCache;
 
 describe('Bookify with in-memory cache', function() {
   before(function() {
-    delete superagent['cache'];
     bookifyInMemoryCache = new bookify({ superagent: superagentCache() });
   });
 

@@ -1,17 +1,16 @@
 import mocha from 'mocha';
 import { expect } from 'chai';
 import bookify from '../lib/bookify';
-import superagent from 'superagent';
 import superagentCache from 'superagent-cache';
 import redisCache from 'cache-service-redis';
+import redisMock from 'redis-js';
 
 let bookifyRedisCache;
 
 describe('Bookify with redis cache', function() {
   before(function() {
-    delete superagent['cache'];
     bookifyRedisCache = new bookify({ 
-      superagent: superagentCache(null, new redisCache({ redisUrl: 'http://user:pass@192.168.59.103:6379/'}))
+      superagent: superagentCache(null, new redisCache({ redisMock: redisMock }))
     });
   }); 
 
