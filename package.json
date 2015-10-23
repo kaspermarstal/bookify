@@ -1,8 +1,8 @@
 {
-  "name": "googlebooks",
-  "version": "0.1.5",
+  "name": "bookify",
+  "version": "0.0.1",
   "description": "A cache-backed lightweight node wrapper for the Google Books API",
-  "main": "./lib/googlebooks.js",
+  "main": "./lib/bookify.js",
   "dependencies": {
     "extend": "^3.0.0",
     "querystring": "^0.2.0",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ilovebike/node-google-books-search"
+    "url": "https://github.com/kaspermarstal/bookify"
   },
   "keywords": [
     "google",

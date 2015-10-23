@@ -12,11 +12,11 @@ A lightweight node wrapper for the Google Books API intended to be used with the
 
 Search for books matching the specified query and automatically cache the result.
 
-	import googlebooks from '../lib/googleBooks.js';
+	import bookify from '../lib/bookify.js';
 	import superagentCache from 'superagent-cache';
 
-	const googlebooksInMemoryCache = new googlebooks({ superagent: superagentCache() });
-	googleBooksInMemoryCache.search('Professional JavaScript for Web Developers')
+	const bookifyInMemoryCache = new bookify({ superagent: superagentCache() });
+	bookifyInMemoryCache.search('Professional JavaScript for Web Developers')
 		.then(function(result) {
 			console.log(result);
 		});
@@ -44,7 +44,7 @@ This returns an array of JSON objects. For example;
 
 	]
 
-The result will be returned form the cache the next time the search is performed. GoogleBooks use a regular superagent instance (i.e. without cache) if the `superagent` argument is left out.
+The result will be returned form the cache the next time the search is performed. `bookify` will fall gracefully fall back to a regular superagent instance (i.e. without cache) if the `superagent` argument is not supplied.
 
 ## Advanced Usage
 
@@ -63,8 +63,8 @@ The search method optionally accepts an options object. See below for an overvie
 		returnFields: 'items(volumeInfo(title,authors,publishedDate))'
 	};
 
-	const googlebooksNoCache = new googlebooks({ options: options });
-	googlebooksNoCache.search('Professional JavaScript for Web Developers') {
+	const bookifyNoCache = new bookify({ options: options });
+	bookifyNoCache.search('Professional JavaScript for Web Developers') {
 			console.log(results);
 	});
 
