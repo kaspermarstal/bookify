@@ -1,10 +1,10 @@
 import mocha from 'mocha';
 import { expect } from 'chai';
-import googleBooks from '../lib/googleBooks.js';
+import bookify from '../lib/bookify';
 
-describe('GoogleBooks without cache', function() {
+describe('Bookify without cache', function() {
   it('should return a JSON object of books with all fields', function() {
-    const g0 = new googleBooks();
+    const g0 = new bookify();
     return g0.search('Guinness World Records')
       .then(function(result) {
         expect(result[0]).to.have.property('title');
@@ -12,7 +12,7 @@ describe('GoogleBooks without cache', function() {
   });
 
   it('should return a JSON object of books with a subset of fields', function() {
-    const g1 = new googleBooks({ options: { returnFields: 'items(volumeInfo(title))' }});
+    const g1 = new bookify({ options: { returnFields: 'items(volumeInfo(title))' }});
     return g1.search('Guinness World Records')
       .then(function(result) {
         expect(result[0]).to.have.property('title');
@@ -23,7 +23,7 @@ describe('GoogleBooks without cache', function() {
   });
 
   it('should return an empty object if there are no results', function() {
-    const g2 = new googleBooks();
+    const g2 = new bookify();
     return g2.search('JCEhrrpxF2E1s7aPW8zd2903tQ4AlCB9')
       .then(function(result) {
         expect(result).to.exist;
@@ -35,7 +35,7 @@ describe('GoogleBooks without cache', function() {
   });
 
   it('should return a specified number of results', function() {
-    const g3 = new googleBooks({ options: { limit: 15 }});
+    const g3 = new bookify({ options: { limit: 15 }});
     return g3.search('Guinness World Records')
       .then(function(result) {
         expect(result).to.exist;
@@ -70,7 +70,7 @@ describe('GoogleBooks without cache', function() {
   // });
 
   it('should return an error if no query is specified', function() {
-    const g6 = new googleBooks();
+    const g6 = new bookify();
     g6.search(null)
       .then(function(result) {
         expect(result).to.be.empty;

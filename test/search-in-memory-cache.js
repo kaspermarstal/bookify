@@ -1,13 +1,19 @@
 import mocha from 'mocha';
 import { expect } from 'chai';
-import googleBooks from '../lib/googlebooks.js';
+import bookify from '../lib/bookify';
+import superagent from 'superagent';
 import superagentCache from 'superagent-cache';
 
-const googlebooksInMemoryCache = new googleBooks({ superagent: superagentCache() });
+let bookifyInMemoryCache;
 
-describe('GoogleBooks with in-memory cache', function() {
+describe('Bookify with in-memory cache', function() {
+  before(function() {
+    delete superagent['cache'];
+    bookifyInMemoryCache = new bookify({ superagent: superagentCache() });
+  });
+
   it('should return a JSON object of books with all fields', function() {
-    return googlebooksInMemoryCache.search('Guinness World Records')
+    return bookifyInMemoryCache.search('Guinness World Records')
       .then(function(result) {
         expect(result[0]).to.have.property('title');
       }, function(err) {
@@ -21,7 +27,7 @@ describe('GoogleBooks with in-memory cache', function() {
     // wiggle room for resource constrained systems
     this.timeout(10);
 
-    return googlebooksInMemoryCache.search('Guinness World Records')
+    return bookifyInMemoryCache.search('Guinness World Records')
       .then(function(result) {
         expect(result[0]).to.have.property('title');
       }, function(err) {
