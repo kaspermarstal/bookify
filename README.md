@@ -44,7 +44,7 @@ This returns an array of JSON objects. For example;
 
 	]
 
-The result will be returned form the cache the next time the search is performed. `bookify` will fall gracefully fall back to a regular superagent instance (i.e. without cache) if the `superagent` argument is not supplied.
+The result will be returned form the cache the next time the search is performed. `bookify` will gracefully fall back to a regular superagent instance (i.e. without cache) if the `superagent` argument is not supplied.
 
 ## Advanced Usage
 
