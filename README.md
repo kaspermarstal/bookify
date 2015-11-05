@@ -1,6 +1,6 @@
 # Bookify
 
-A lightweight node wrapper for the Google Books API intended to be used with the `superagent-cache` module.
+A lightweight node wrapper for the Google Books API intended to be used with the `superagent-cache` module. Use this package to circumvent the limited number of allowed API requests per day.
 
 ## Install
 
@@ -8,7 +8,7 @@ A lightweight node wrapper for the Google Books API intended to be used with the
 
 ## Basic Usage
 
-### .search(query, options, callback)
+### .search(query)
 
 Search for books matching the specified query and automatically cache the result.
 
@@ -22,7 +22,7 @@ Search for books matching the specified query and automatically cache the result
 		});
 	});
 
-This returns an array of JSON objects. For example;
+This returns an array of JSON objects. For example:
 
 	[
 		{
@@ -44,13 +44,25 @@ This returns an array of JSON objects. For example;
 
 	]
 
-The result will be returned form the cache the next time the search is performed. `bookify` will gracefully fall back to a regular superagent instance (i.e. without cache) if the `superagent` argument is not supplied.
+`bookify` will return a cached result the next time the search is performed and avoid hitting the GoogleBooks API. The search function always returns a promise that is fulfilled when the result is retrieved fomr either GoogleBooks API or cache. The search function will gracefully fall back to a regular superagent instance (i.e. without cache) if the `superagent` argument is not supplied.
+
 
 ## Advanced Usage
 
-The search method optionally accepts an options object. See below for an overview of the available options.
+The constructor optionally accepts an options object. The available options are:
 
-	import googlebooks from 'googlebooks';
+`key` : Your Google API key (Optional)   
+`field` : Search in a specified field (title, author, publisher, subject or isbn) (Optional)   
+`offset` : The position in the collection at which to start the list of results (Default: 0)   
+`limit` : The maximum number of results to return (Max 40) (Defult: 10)   
+`type` : Restrict results to books or magazines (Default: all)   
+`order` : Order results by relevance or newest (Default: relevance)   
+`lang` : Restrict results to a specified language (two-letter ISO-639-1 code) (Default: en)
+`returnFields`: Restrict response to the specified fields (Default: all)
+
+## Example
+
+	import bookify from 'bookify';
 
 	const options = {
 		key: "YOUR API KEY",
@@ -67,16 +79,5 @@ The search method optionally accepts an options object. See below for an overvie
 	bookifyNoCache.search('Professional JavaScript for Web Developers') {
 			console.log(results);
 	});
-
-## Options
-
-`key` : Your Google API key (Optional)   
-`field` : Search in a specified field (title, author, publisher, subject or isbn) (Optional)   
-`offset` : The position in the collection at which to start the list of results (Default: 0)   
-`limit` : The maximum number of results to return (Max 40) (Defult: 10)   
-`type` : Restrict results to books or magazines (Default: all)   
-`order` : Order results by relevance or newest (Default: relevance)   
-`lang` : Restrict results to a specified language (two-letter ISO-639-1 code) (Default: en)
-`returnFields`: Restrict response to the specified fields (Default: all)
 
 For more info see the [Google Books API documentation](http://code.google.com/apis/books/docs/v1/using.html) and [superagent-cache documentation](https://github.com/jpodwys/superagent-cache).
