@@ -1,6 +1,6 @@
 {
   "name": "bookify",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A cache-backed lightweight node wrapper for the Google Books API",
   "main": "./build/bookify.js",
   "dependencies": {
@@ -10,15 +10,15 @@
   },
   "devDependencies": {
     "babel": "^5.8.23",
-    "cache-service-redis": "^1.1.1",
+    "cache-service-redis": "1.1.1",
     "chai": "^3.3.0",
     "mocha": "^2.3.3",
     "redis-js": "^0.1.1",
-    "superagent-cache": "^1.0.4"
+    "superagent-cache": "1.2.1"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers js:babel/register --timeout 10000 --reporter spec",
-    "prepublish": "babel lib/bookify.js --out-file build/bookify.js"
+    "prepublish": "mkdir -p build && babel lib/bookify.js --out-file build/bookify.js"
   },
   "repository": {
     "type": "git",

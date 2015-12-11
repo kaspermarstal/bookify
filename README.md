@@ -2,6 +2,8 @@
 
 A lightweight node wrapper for the Google Books API intended to be used with the `superagent-cache` module. Use this package to circumvent the limited number of allowed API requests per day.
 
+Compatible with superagent-cache 1.0.4 - 1.0.6 and >= 1.2.1.
+
 ## Install
 
     npm install bookify
